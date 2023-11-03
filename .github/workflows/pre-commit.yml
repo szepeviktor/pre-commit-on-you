@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+
+name: "pre-commit"
+
+on:
+    workflow_dispatch:
+        inputs:
+            repository:
+                type: "string"
+                description: "Repository: username/project"
+                required: true
+
+permissions:
+    contents: "read"
+
+concurrency:
+    group: "${{ github.workflow }}-${{ github.ref }}"
+    cancel-in-progress: true
+
+jobs:
+    pre_commit:
+        name: "pre-commit - ${{ inputs.repository }}"
+        runs-on: "ubuntu-22.04"
+        timeout-minutes: 1
+        steps:
+        -
+            name: "Checkout repository"
+            uses: "actions/checkout@v4"
+            with:
+                repository: "${{ inputs.repository }}"
+        -
+            name: "Search for misspellings"
+            uses: "actions/setup-python@v4"
+        -
+            name: "Run pre-commit"
+            uses: "pre-commit/action@v3.0.0"
