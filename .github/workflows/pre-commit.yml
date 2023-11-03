@@ -34,5 +34,21 @@ jobs:
             with:
                 python-version: "3.x"
         -
+            name: "Detect PHP project"
+            id: "detect_php"
+            run: |
+                echo "exists=$(test -r composer.json && echo "true" || echo "false")" >>"${GITHUB_OUTPUT}"
+        -
+            name: "Set up PHP"
+            if: "${{ steps.detect_php.outputs.exists == 'true' }}"
+            uses: "shivammathur/setup-php@2.27.0"
+            with:
+                php-version: "8.2"
+                coverage: "xdebug"
+        -
+            name: "Install dependencies"
+            if: "${{ steps.detect_php.outputs.exists == 'true' }}"
+            uses: "ramsey/composer-install@2.2.0"
+        -
             name: "Run pre-commit"
             uses: "pre-commit/action@v3.0.0"
