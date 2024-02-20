@@ -51,4 +51,4 @@ jobs:
             uses: "ramsey/composer-install@2.2.0"
         -
             name: "Run pre-commit"
-            uses: "pre-commit/action@v3.0.0"
+            uses: "pre-commit/action@v3.0.1"
